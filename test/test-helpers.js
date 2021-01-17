@@ -43,7 +43,7 @@ function makeRoutinesArray(users) {
             routines_name: 'routine-4',
             assigned_user: users[2].id
         },
-    ]
+    ];
 }
 
 function makeExercisesArray(routines) {
@@ -78,7 +78,24 @@ function makeExercisesArray(routines) {
             exercises_description: 'Description-5',
             assigned_routine: routines[0],
         },
-    ]
+    ];
+}
+
+function makeMaliciousRoutine(user) {
+    const maliciousRoutine = {
+        id: 911,
+        routines_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
+        assigned_user = user.id,
+    };
+    const expectedRoutine = {
+        ...maliciousRoutine,
+        routines_name: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;'
+    };
+
+    return {
+        maliciousRoutine,
+        expectedRoutine,
+    }
 }
 
 module.exports = {
