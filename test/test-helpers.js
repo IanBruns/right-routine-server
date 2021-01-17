@@ -98,8 +98,29 @@ function makeMaliciousRoutine(user) {
     }
 }
 
+function makeMaliciousExercise(routine) {
+    const maliciousExercise = {
+        exercises_id: 911,
+        exercises_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
+        exercises_description: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
+        assigned_routine: routine.id,
+    };
+    const expectedExercise = {
+        ...maliciousExercise,
+        exercises_name: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
+        exercises_description: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
+    };
+
+    return {
+        maliciousExercise,
+        expectedExercise,
+    }
+}
+
 module.exports = {
     makeUsersArray,
     makeRoutinesArray,
     makeExercisesArray,
+    makeMaliciousRoutine,
+    makeMaliciousExercise,
 }
