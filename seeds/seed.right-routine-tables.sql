@@ -6,13 +6,13 @@ TRUNCATE
     users
     RESTART IDENTITY CASCADE;
 
-INSERT INTO users (user_name, user_password)
+INSERT INTO users (users_name, users_password)
 VALUES
 ('test_man', '$2a$12$Zl/Enp7x915KObPF8ehDbe9kGd3FmE.P1NvNmz01HfgHmZiNXXQc2'),
 ('Sonic', '$2a$12$BTKg0WyDtKUKlxFdSOHYLOBqqIApjyWPj9Z4aWX8JCt2Zh99wLAIy'),
 ('SupahMarioBros2', '$2a$12$lXP3SM8QE3iardCEfldfnuaXlUBZoAir9Hm553zD3H1iKz6NRbDta');
 
-INSERT INTO routines (routine_name, assigned_user)
+INSERT INTO routines (routines_name, assigned_user)
 VALUES
 ('Legs', 1),
 ('Abs', 1),
@@ -21,7 +21,7 @@ VALUES
 ('Cardio', 3),
 ('Back', 3);
 
-INSERT INTO exercises (exercise_name, exercise_description, assigned_routine)
+INSERT INTO exercises (exercises_name, exercises_description, assigned_routine)
 VALUES
 ('Squat', 'You know, a squat', 1),
 ('Bridge', 'Make a hip bridge', 1),
