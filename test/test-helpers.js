@@ -5,18 +5,18 @@ function makeUsersArray() {
     return [
         {
             users_id: 1,
-            user_name: 'Test-user-1',
-            user_password: 'password',
+            users_name: 'Test-user-1',
+            users_password: 'password',
         },
         {
             id: 2,
-            user_name: 'Test-user-2',
-            user_password: 'password',
+            users_name: 'Test-user-2',
+            users_password: 'password',
         },
         {
             id: 3,
-            user_name: 'Test-user-3',
-            user_password: 'password',
+            users_name: 'Test-user-3',
+            users_password: 'password',
         },
     ]
 }
@@ -25,11 +25,28 @@ function makeRoutinesArray() {
     return [
         {
             id: 1,
-            routine_name:
-        }
+            routines_name: 'routine-1',
+            assigned_user: 1
+        },
+        {
+            id: 2,
+            routines_name: 'routine-2',
+            assigned_user: 1
+        },
+        {
+            id: 3,
+            routines_name: 'routine-3',
+            assigned_user: 2
+        },
+        {
+            id: 4,
+            routines_name: 'routine-4',
+            assigned_user: 3
+        },
     ]
 }
 
 module.exports = {
     makeUsersArray,
+    makeRoutinesArray,
 }
