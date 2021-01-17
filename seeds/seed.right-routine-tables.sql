@@ -18,7 +18,7 @@ VALUES
 ('Abs', 1),
 ('Arms', 2),
 ('Shoulders', 2),
-('Cardio' 3),
+('Cardio', 3),
 ('Back', 3);
 
 INSERT INTO exercises (exercise_name, exercise_description, assigned_routine)
@@ -40,7 +40,7 @@ VALUES
 ('Preacher Curl', 'The Iron Temple', 3),
 ('Shrugs', 'I dunno', 4),
 ('Overhead press', null, 4),
-('Front Raise', 'Anterior delts', 4)
+('Front Raise', 'Anterior delts', 4),
 ('Lateral Raise', null, 4),
 ('Combined Raise', 'Front and Lateral combo', 4),
 ('Run', 'One Leg in front of the other', 5),
