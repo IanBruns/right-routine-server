@@ -5,18 +5,18 @@ function makeUsersArray() {
     return [
         {
             id: 1,
-            users_name: 'Test-user-1',
-            users_password: 'password',
+            user_name: 'Test-user-1',
+            password: 'password',
         },
         {
             id: 2,
-            users_name: 'Test-user-2',
-            users_password: 'password',
+            user_name: 'Test-user-2',
+            password: 'password',
         },
         {
             id: 3,
-            users_name: 'Test-user-3',
-            users_password: 'password',
+            user_name: 'Test-user-3',
+            password: 'password',
         },
     ]
 }
@@ -149,7 +149,7 @@ function cleanTables(db) {
 function seedUsers(db, users) {
     const preppedUsers = users.map(user => ({
         ...user,
-        users_password: bcrypt.hashSync(user.users_password, 10)
+        password: bcrypt.hashSync(user.password, 10)
     }))
 
     return db.into('users').insert(preppedUsers)
