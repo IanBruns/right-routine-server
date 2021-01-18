@@ -117,10 +117,25 @@ function makeMaliciousExercise(routine) {
     }
 }
 
+function seedUsers(db, users) {
+    const preppedUsers = users.map(user => ({
+        ...user,
+        users_password = bcrypt.hashSync(user.users_password, 10)
+    }))
+
+    return db.into('users').insert(preppedUsers)
+        .then(() =>
+            db.raw(
+                `SELECT setval('users_id_seq', ?)`,
+                [users[users.length - 1].id],
+            ))
+}
+
 module.exports = {
     makeUsersArray,
     makeRoutinesArray,
     makeExercisesArray,
     makeMaliciousRoutine,
     makeMaliciousExercise,
+    seedUsers,
 }
