@@ -25,22 +25,22 @@ function makeRoutinesArray(users) {
     return [
         {
             id: 1,
-            routines_name: 'routine-1',
+            routine_name: 'routine-1',
             assigned_user: users[0].id
         },
         {
             id: 2,
-            routines_name: 'routine-2',
+            routine_name: 'routine-2',
             assigned_user: users[0].id
         },
         {
             id: 3,
-            routines_name: 'routine-3',
+            routine_name: 'routine-3',
             assigned_user: users[1].id
         },
         {
             id: 4,
-            routines_name: 'routine-4',
+            routine_name: 'routine-4',
             assigned_user: users[2].id
         },
     ];
@@ -50,32 +50,32 @@ function makeExercisesArray(routines) {
     return [
         {
             id: 1,
-            exercises_name: 'Exercise-1',
-            exercises_description: 'Description-1',
+            exercise_name: 'Exercise-1',
+            exercise_description: 'Description-1',
             assigned_routine: routines[0],
         },
         {
             id: 2,
-            exercises_name: 'Exercise-2',
-            exercises_description: 'Description-2',
+            exercise_name: 'Exercise-2',
+            exercise_description: 'Description-2',
             assigned_routine: routines[1],
         },
         {
             id: 3,
-            exercises_name: 'Exercise-3',
-            exercises_description: 'Description-3',
+            exercise_name: 'Exercise-3',
+            exercise_description: 'Description-3',
             assigned_routine: routines[1],
         },
         {
             id: 4,
-            exercises_name: 'Exercise-4',
-            exercises_description: 'Description-4',
+            exercise_name: 'Exercise-4',
+            exercise_description: 'Description-4',
             assigned_routine: routines[0],
         },
         {
             id: 5,
-            exercises_name: 'Exercise-5',
-            exercises_description: 'Description-5',
+            exercise_name: 'Exercise-5',
+            exercise_description: 'Description-5',
             assigned_routine: routines[0],
         },
     ];
@@ -84,12 +84,12 @@ function makeExercisesArray(routines) {
 function makeMaliciousRoutine(user) {
     const maliciousRoutine = {
         id: 911,
-        routines_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
+        routine_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
         assigned_user: user.id,
     };
     const expectedRoutine = {
         ...maliciousRoutine,
-        routines_name: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;'
+        routine_name: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;'
     };
 
     return {
@@ -101,14 +101,14 @@ function makeMaliciousRoutine(user) {
 function makeMaliciousExercise(routine) {
     const maliciousExercise = {
         id: 911,
-        exercises_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
-        exercises_description: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
+        exercise_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
+        exercise_description: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
         assigned_routine: routine.id,
     };
     const expectedExercise = {
         ...maliciousExercise,
-        exercises_name: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
-        exercises_description: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
+        exercise_name: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
+        exercise_description: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
     };
 
     return {
