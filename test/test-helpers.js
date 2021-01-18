@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 function makeUsersArray() {
     return [
         {
-            users_id: 1,
+            id: 1,
             users_name: 'Test-user-1',
             users_password: 'password',
         },
@@ -49,31 +49,31 @@ function makeRoutinesArray(users) {
 function makeExercisesArray(routines) {
     return [
         {
-            exercises_id: 1,
+            id: 1,
             exercises_name: 'Exercise-1',
             exercises_description: 'Description-1',
             assigned_routine: routines[0],
         },
         {
-            exercises_id: 2,
+            id: 2,
             exercises_name: 'Exercise-2',
             exercises_description: 'Description-2',
             assigned_routine: routines[1],
         },
         {
-            exercises_id: 3,
+            id: 3,
             exercises_name: 'Exercise-3',
             exercises_description: 'Description-3',
             assigned_routine: routines[1],
         },
         {
-            exercises_id: 4,
+            id: 4,
             exercises_name: 'Exercise-4',
             exercises_description: 'Description-4',
             assigned_routine: routines[0],
         },
         {
-            exercises_id: 5,
+            id: 5,
             exercises_name: 'Exercise-5',
             exercises_description: 'Description-5',
             assigned_routine: routines[0],
@@ -100,7 +100,7 @@ function makeMaliciousRoutine(user) {
 
 function makeMaliciousExercise(routine) {
     const maliciousExercise = {
-        exercises_id: 911,
+        id: 911,
         exercises_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
         exercises_description: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
         assigned_routine: routine.id,
@@ -124,10 +124,32 @@ function makeExercisesFixtures() {
     return { testUsers, testRoutines, testExercises }
 }
 
+function cleanTables(db) {
+    return db.transaction(trx =>
+        trx.raw(
+            `TRUNCATE
+                exercises,
+                routines,
+                users
+            `
+        )
+            .then(() =>
+                Promise.all([
+                    trx.raw(`ALTER SEQUENCE id_seq minvalue 0 START WITH 1`),
+                    trx.raw(`ALTER SEQUENCE routines_id_seq minvalue 0 START WITH 1`),
+                    trx.raw(`ALTER SEQUENCE users_comments_id_seq minvalue 0 START WITH 1`),
+                    trx.raw(`SELECT setval('id_seq', 0)`),
+                    trx.raw(`SELECT setval('routines_id_seq', 0)`),
+                    trx.raw(`SELECT setval('users_comments_id_seq', 0)`),
+                ])
+            )
+    )
+}
+
 function seedUsers(db, users) {
     const preppedUsers = users.map(user => ({
         ...user,
-        users_password = bcrypt.hashSync(user.users_password, 10)
+        users_password: bcrypt.hashSync(user.users_password, 10)
     }))
 
     return db.into('users').insert(preppedUsers)
@@ -145,5 +167,6 @@ module.exports = {
     makeMaliciousRoutine,
     makeMaliciousExercise,
     makeExercisesFixtures,
+    cleanTables,
     seedUsers,
 }
