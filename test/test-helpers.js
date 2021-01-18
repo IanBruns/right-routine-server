@@ -125,8 +125,8 @@ function makeExercisesFixtures() {
 }
 
 function cleanTables(db) {
-    return db.transaction(trx =>
-        trx.raw(
+    return db.transaction(async trx =>
+        await trx.raw(
             `TRUNCATE
                 exercises,
                 routines,

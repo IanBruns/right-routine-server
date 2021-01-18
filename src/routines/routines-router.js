@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const RoutinesService = require('./routines-service');
-const { requireAuth } = require('../middleware/api-auth')
+const { requireAuth } = require('../middleware/api-auth');
 
 const routinesRouter = express.Router();
 const jsonBodyParser = express.json();
