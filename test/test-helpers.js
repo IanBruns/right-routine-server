@@ -95,7 +95,7 @@ function makeMaliciousRoutine(user) {
     return {
         maliciousRoutine,
         expectedRoutine,
-    }
+    };
 }
 
 function makeMaliciousExercise(routine) {
