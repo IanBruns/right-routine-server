@@ -157,7 +157,26 @@ function seedUsers(db, users) {
             db.raw(
                 `SELECT setval('users_id_seq', ?)`,
                 [users[users.length - 1].id],
-            ))
+            ));
+}
+
+function seedRoutinesTable(db, users, routines, exercises) {
+    return db.transaction(async trx => {
+        await seedUsers(trx, users);
+        await trx.into('routines').insert(routines);
+        await trx.raw(
+            `SELECT setval('routines_id_seq', ?)`,
+            [routines[routines.length - 1].id],
+        );
+
+        if (exercises.length) {
+            await trx.into('exercises').insert(exercises);
+            await trx.raw(
+                `SELECT setval('exercises_id_seq', ?)`,
+                [exercises[exercises.length - 1].id],
+            )
+        }
+    })
 }
 
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
@@ -178,5 +197,6 @@ module.exports = {
     makeExercisesFixtures,
     cleanTables,
     seedUsers,
+    seedRoutinesTable,
     makeAuthHeader,
 }
