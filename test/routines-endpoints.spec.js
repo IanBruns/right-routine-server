@@ -24,7 +24,7 @@ describe.only(`Routines Endpoints`, function () {
 
     afterEach('cleanup', () => helpers.cleanTables(db));
 
-    describe.only(`GET /api/routines`, () => {
+    describe(`GET /api/routines`, () => {
         context(`When there are no routines in the database`, () => {
             beforeEach('seed users into the database', () => {
                 return helpers.seedUsers(db, testUsers);

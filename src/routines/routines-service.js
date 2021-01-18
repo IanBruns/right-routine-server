@@ -9,7 +9,9 @@ const RoutinesService = {
         };
     },
     getAllRoutines(db) {
-        return db.select('*').from('routines');
+        return db
+            .select('*')
+            .from('routines');
     }
 };
 

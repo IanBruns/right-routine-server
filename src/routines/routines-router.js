@@ -8,8 +8,11 @@ const jsonBodyParser = express.json();
 
 routinesRouter.route('/')
     .get(requireAuth, (req, res, next) => {
-        console.log(req.user);
         RoutinesService.getAllRoutines(req.app.get('db'))
+            .then(routines => {
+                const filteredRoutines = routines.filter(routine => routine.assigned_user == req.user.id);
+                return filteredRoutines;
+            })
             .then(routines => {
                 res.json(routines.map(RoutinesService.serializeRoutine));
             })

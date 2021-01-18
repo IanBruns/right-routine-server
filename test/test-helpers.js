@@ -118,9 +118,9 @@ function makeMaliciousExercise(routine) {
 }
 
 function makeExercisesFixtures() {
-    const testUsers = makeUsersArray()
+    const testUsers = makeUsersArray();
     const testRoutines = makeRoutinesArray(testUsers);
-    const testExercises = makeExercisesArray(testRoutines)
+    const testExercises = makeExercisesArray(testRoutines);
     return { testUsers, testRoutines, testExercises }
 }
 
