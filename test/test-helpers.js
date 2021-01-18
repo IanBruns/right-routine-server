@@ -117,6 +117,13 @@ function makeMaliciousExercise(routine) {
     }
 }
 
+function makeExercisesFixtures() {
+    const testUsers = makeUsersArray()
+    const testRoutines = makeRoutinesArray(testUsers);
+    const testExercises = makeExercisesArray(testRoutines)
+    return { testUsers, testRoutines, testExercises }
+}
+
 function seedUsers(db, users) {
     const preppedUsers = users.map(user => ({
         ...user,
@@ -137,5 +144,6 @@ module.exports = {
     makeExercisesArray,
     makeMaliciousRoutine,
     makeMaliciousExercise,
+    makeExercisesFixtures,
     seedUsers,
 }
