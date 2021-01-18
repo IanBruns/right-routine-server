@@ -1,8 +1,7 @@
 
 const knex = require('knex');
 const bcrypt = require('bcryptjs');
-// eslint-disable-next-line semi
-const app = require('../src/app')
+const app = require('../src/app');
 const helpers = require('./test-helpers');
 
 describe('Users Endpoints', function () {
@@ -34,14 +33,12 @@ describe('Users Endpoints', function () {
                 )
             );
 
-            const requiredFields = ['user_name', 'password', 'full_name'];
+            const requiredFields = ['user_name', 'password'];
 
             requiredFields.forEach(field => {
                 const registerAttemptBody = {
                     user_name: 'test user_name',
                     password: 'test password',
-                    full_name: 'test full_name',
-                    nickname: 'test nickname',
                 };
 
                 it(`responds with 400 required error when '${field}' is missing`, () => {
@@ -60,7 +57,6 @@ describe('Users Endpoints', function () {
                 const userShortPassword = {
                     user_name: 'test user_name',
                     password: '1234567',
-                    full_name: 'test full_name',
                 };
                 return supertest(app)
                     .post('/api/users')
@@ -72,7 +68,6 @@ describe('Users Endpoints', function () {
                 const userLongPassword = {
                     user_name: 'test user_name',
                     password: '*'.repeat(73),
-                    full_name: 'test full_name',
                 };
                 return supertest(app)
                     .post('/api/users')
@@ -84,7 +79,6 @@ describe('Users Endpoints', function () {
                 const userPasswordStartsSpaces = {
                     user_name: 'test user_name',
                     password: ' 1Aa!2Bb@',
-                    full_name: 'test full_name',
                 };
                 return supertest(app)
                     .post('/api/users')
@@ -96,7 +90,6 @@ describe('Users Endpoints', function () {
                 const userPasswordEndsSpaces = {
                     user_name: 'test user_name',
                     password: '1Aa!2Bb@ ',
-                    full_name: 'test full_name',
                 };
                 return supertest(app)
                     .post('/api/users')
@@ -108,7 +101,6 @@ describe('Users Endpoints', function () {
                 const userPasswordNotComplex = {
                     user_name: 'test user_name',
                     password: '11AAaabb',
-                    full_name: 'test full_name',
                 };
                 return supertest(app)
                     .post('/api/users')
@@ -120,7 +112,6 @@ describe('Users Endpoints', function () {
                 const duplicateUser = {
                     user_name: testUser.user_name,
                     password: '11AAaa!!',
-                    full_name: 'test full_name',
                 };
                 return supertest(app)
                     .post('/api/users')
@@ -134,7 +125,6 @@ describe('Users Endpoints', function () {
                 const newUser = {
                     user_name: 'test user_name',
                     password: '11AAaa!!',
-                    full_name: 'test full_name',
                 };
                 return supertest(app)
                     .post('/api/users')
@@ -143,28 +133,17 @@ describe('Users Endpoints', function () {
                     .expect(res => {
                         expect(res.body).to.have.property('id');
                         expect(res.body.user_name).to.eql(newUser.user_name);
-                        expect(res.body.full_name).to.eql(newUser.full_name);
-                        expect(res.body.nickname).to.eql('');
                         expect(res.body).to.not.have.property('password');
                         expect(res.headers.location).to.eql(`/api/users/${res.body.id}`);
-                        const expectedDate = new Date().toLocaleString('en', { timeZone: 'UTC' });
-                        const actualDate = new Date(res.body.date_created).toLocaleString();
-                        expect(actualDate).to.eql(expectedDate);
                     })
                     .expect(res =>
                         db
-                            .from('blogful_users')
+                            .from('users')
                             .select('*')
                             .where({ id: res.body.id })
                             .first()
                             .then(row => {
                                 expect(row.user_name).to.eql(newUser.user_name);
-                                expect(row.full_name).to.eql(newUser.full_name);
-                                expect(row.nickname).to.eql(null);
-                                const expectedDate = new Date().toLocaleString('en', { timeZone: 'UTC' });
-                                const actualDate = new Date(row.date_created).toLocaleString();
-                                expect(actualDate).to.eql(expectedDate);
-
                                 return bcrypt.compare(newUser.password, row.password);
                             })
                             .then(compareMatch => {
