@@ -85,7 +85,7 @@ function makeMaliciousRoutine(user) {
     const maliciousRoutine = {
         id: 911,
         routines_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
-        assigned_user = user.id,
+        assigned_user: user.id,
     };
     const expectedRoutine = {
         ...maliciousRoutine,
