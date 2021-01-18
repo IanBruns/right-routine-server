@@ -27,10 +27,7 @@ describe('Users Endpoints', function () {
     describe(`POST /api/users`, () => {
         context(`User Validation`, () => {
             beforeEach('insert users', () =>
-                helpers.seedUsers(
-                    db,
-                    testUsers
-                )
+                helpers.seedUsers(db, testUsers)
             );
 
             const requiredFields = ['user_name', 'password'];
