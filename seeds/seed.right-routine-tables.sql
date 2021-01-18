@@ -6,7 +6,7 @@ TRUNCATE
     users
     RESTART IDENTITY CASCADE;
 
-INSERT INTO users (users_name, users_password)
+INSERT INTO users (user_name, password)
 VALUES
 ('test_man', '$2a$12$Zl/Enp7x915KObPF8ehDbe9kGd3FmE.P1NvNmz01HfgHmZiNXXQc2'),
 ('Sonic', '$2a$12$BTKg0WyDtKUKlxFdSOHYLOBqqIApjyWPj9Z4aWX8JCt2Zh99wLAIy'),

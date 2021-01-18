@@ -135,12 +135,12 @@ function cleanTables(db) {
         )
             .then(() =>
                 Promise.all([
-                    trx.raw(`ALTER SEQUENCE id_seq minvalue 0 START WITH 1`),
+                    trx.raw(`ALTER SEQUENCE exercises_id_seq minvalue 0 START WITH 1`),
                     trx.raw(`ALTER SEQUENCE routines_id_seq minvalue 0 START WITH 1`),
-                    trx.raw(`ALTER SEQUENCE users_comments_id_seq minvalue 0 START WITH 1`),
-                    trx.raw(`SELECT setval('id_seq', 0)`),
+                    trx.raw(`ALTER SEQUENCE users_id_seq minvalue 0 START WITH 1`),
+                    trx.raw(`SELECT setval('exercises_id_seq', 0)`),
                     trx.raw(`SELECT setval('routines_id_seq', 0)`),
-                    trx.raw(`SELECT setval('users_comments_id_seq', 0)`),
+                    trx.raw(`SELECT setval('users_id_seq', 0)`),
                 ])
             )
     )
