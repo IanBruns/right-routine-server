@@ -157,7 +157,7 @@ describe.only(`Routines Endpoints`, function () {
         });
     });
 
-    describe(`DELETE /api/routines/:routine_id`, () => {
+    describe.only(`DELETE /api/routines/:routine_id`, () => {
         context(`Given the item does not exist`, () => {
             beforeEach('Seed Users in the tables', () => {
                 return helpers.seedUsers(db, testUsers);
@@ -172,7 +172,7 @@ describe.only(`Routines Endpoints`, function () {
                     .expect(404, {
                         error: `Routine not found`
                     });
-            })
+            });
         });
     });
 });

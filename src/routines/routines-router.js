@@ -41,7 +41,6 @@ routinesRouter.route('/:routine_id')
         return res.status(200).json(RoutinesService.serializeRoutine(res.routine));
     })
     .delete((req, res, next) => {
-        RoutinesService.getById(req.app.get('db'), req.user.id, parseInt(req.params.routine_id))
     });
 
 async function checkValidRoutine(req, res, next) {
