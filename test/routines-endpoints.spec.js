@@ -53,4 +53,19 @@ describe.only(`Routines Endpoints`, function () {
             });
         });
     });
+
+    describe.only(`GET /routines/:routine_id`, () => {
+        context(`When there are no items in the database`, () => {
+            it(`Returns a 404 and id not found`, () => {
+                const testId = 1612;
+
+                return supertest(app)
+                    .get(`/api/routines/${testId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(404, {
+                        error: `Routine not found`
+                    });
+            });
+        });
+    });
 });
