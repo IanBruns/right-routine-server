@@ -36,27 +36,33 @@ routinesRouter.route('/')
 
 routinesRouter.route('/:routine_id')
     .all(requireAuth)
+    .all(checkValidRoutine)
     .get((req, res, next) => {
-        RoutinesService.getById(req.app.get('db'), req.user.id, parseInt(req.params.routine_id))
-            .then(routine => {
-                if (!routine) {
-                    return res.status(404).json({
-                        error: 'Routine not found'
-                    });
-                }
-                return res.status(200).json(RoutinesService.serializeRoutine(routine));
-            })
-            .catch(next);
+        return res.status(200).json(RoutinesService.serializeRoutine(res.routine));
     })
     .delete((req, res, next) => {
         RoutinesService.getById(req.app.get('db'), req.user.id, parseInt(req.params.routine_id))
-            .then(routine => {
-                if (!routine) {
-                    return res.status(404).json({
-                        error: 'Routine not found'
-                    });
-                }
-            });
     });
+
+async function checkValidRoutine(req, res, next) {
+    try {
+        const routine = await RoutinesService.getById(
+            req.app.get('db'),
+            req.user.id,
+            parseInt(req.params.routine_id)
+        )
+
+        if (!routine) {
+            return res.status(404).json({
+                error: 'Routine not found'
+            });
+        }
+
+        res.routine = routine;
+        next()
+    } catch (error) {
+        next(error);
+    }
+}
 
 module.exports = routinesRouter;

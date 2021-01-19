@@ -157,10 +157,10 @@ describe.only(`Routines Endpoints`, function () {
         });
     });
 
-    describe.only(`DELETE /api/routines/:routine_id`, () => {
+    describe(`DELETE /api/routines/:routine_id`, () => {
         context(`Given the item does not exist`, () => {
             beforeEach('Seed Users in the tables', () => {
-                return helpers.seedUsers(testUsers);
+                return helpers.seedUsers(db, testUsers);
             });
 
             it(`returns a 404 with the Routine not found`, () => {
