@@ -227,4 +227,23 @@ describe(`Routines Endpoints`, function () {
             });
         });
     });
+
+    describe.only(`PATCH /api/routines/:routine_id`, () => {
+        beforeEach('seed the routines table', () => {
+            return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
+        });
+
+        it(`sends a 400 with an error when there is no valid name in the request body`, () => {
+            const testId = 1;
+            const updateRoutineNoName = { routine_name: '' };
+
+            return supertest(app)
+                .patch(`/api/routines/${testId}`)
+                .set('Authorization', helpers.makeAuthHeader(testUser))
+                .send(updateRoutineNoName)
+                .expect(400, {
+                    error: { message: `routine_name must be in request body` }
+                })
+        });
+    });
 });
