@@ -7,7 +7,7 @@ const helpers = require('./test-helpers');
 describe(`Routines Endpoints`, function () {
     let db;
 
-    const { testUsers, testRoutines, } = helpers.makeExercisesFixtures();
+    const { testUsers, testRoutines, testExercises } = helpers.makeExercisesFixtures();
     const testUser = testUsers[0];
     const testRoutine = testRoutines[0];
 
@@ -175,10 +175,35 @@ describe(`Routines Endpoints`, function () {
             });
         });
 
-        describe(`Given the item exists in the database`, () => {
+        describe.only(`Given the item exists in the database`, () => {
             context('If there are no exericses in the database', () => {
                 beforeEach('Seed the routines table without Exercises', () => {
                     return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
+                });
+
+                it('Returns a 204 and removes the routine from the database', () => {
+                    const deleteId = 1;
+                    const filteredRoutines = testRoutines.filter(routine => {
+                        return (routine.assigned_user == testUser.id
+                            && routine.id != deleteId);
+                    });
+
+                    return supertest(app)
+                        .delete(`/api/routines/${deleteId}`)
+                        .set('Authorization', helpers.makeAuthHeader(testUser))
+                        .expect(204)
+                        .then(res =>
+                            supertest(app)
+                                .get('/api/routines')
+                                .set('Authorization', helpers.makeAuthHeader(testUser))
+                                .expect(filteredRoutines)
+                        );
+                });
+            });
+
+            context('If there are exericses in the database', () => {
+                beforeEach('Seed the routines table without Exercises', () => {
+                    return helpers.seedRoutinesTable(db, testUsers, testRoutines, testExercises);
                 });
 
                 it('Returns a 204 and removes the routine from the database', () => {
