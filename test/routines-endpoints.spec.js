@@ -68,7 +68,7 @@ describe(`Routines Endpoints`, function () {
                     .get(`/api/routines/${testId}`)
                     .set('Authorization', helpers.makeAuthHeader(testUser))
                     .expect(404, {
-                        error: `Routine not found`
+                        error: { message: `Routine not found` }
                     });
             });
         });
@@ -90,7 +90,7 @@ describe(`Routines Endpoints`, function () {
                     .get(`/api/routines/${testRoutines[testRoutines.length - 1].id}`)
                     .set('Authorization', helpers.makeAuthHeader(testUser))
                     .expect(404, {
-                        error: `Routine not found`
+                        error: { message: `Routine not found` }
                     });
             });
         });
@@ -111,7 +111,7 @@ describe(`Routines Endpoints`, function () {
                 .set('Authorization', helpers.makeAuthHeader(testUser))
                 .send(postRoutineNoName)
                 .expect(400, {
-                    error: `Missing routine_name in request body`
+                    error: { message: `Missing routine_name in request body` }
                 });
         });
 
@@ -170,12 +170,12 @@ describe(`Routines Endpoints`, function () {
                     .get(`/api/routines/${testId}`)
                     .set('Authorization', helpers.makeAuthHeader(testUser))
                     .expect(404, {
-                        error: `Routine not found`
+                        error: { message: `Routine not found` }
                     });
             });
         });
 
-        describe.only(`Given the item exists in the database`, () => {
+        describe(`Given the item exists in the database`, () => {
             context('If there are no exericses in the database', () => {
                 beforeEach('Seed the routines table without Exercises', () => {
                     return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);

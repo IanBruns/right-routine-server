@@ -20,7 +20,7 @@ routinesRouter.route('/')
 
         if (newRoutine.routine_name == null || newRoutine.routine_name.length < 1) {
             return res.status(400).json({
-                error: `Missing routine_name in request body`
+                error: { message: `Missing routine_name in request body` }
             });
         }
         newRoutine.assigned_user = req.user.id;
@@ -45,7 +45,17 @@ routinesRouter.route('/:routine_id')
             .then(numRowsAffected => {
                 return res.status(204).end();
             })
-    });
+    })
+    .patch(jsonBodyParser, (req, res, next) => {
+        const { routine_name } = req.body;
+        const routineToUpdate = { routine_name };
+
+        if (!routineToUpdate || routineToUpdate.routine_name.length < 1) {
+            return res.status(400).json({
+                error: {}
+            })
+        }
+    })
 
 async function checkValidRoutine(req, res, next) {
     try {
@@ -57,7 +67,7 @@ async function checkValidRoutine(req, res, next) {
 
         if (!routine) {
             return res.status(404).json({
-                error: 'Routine not found'
+                error: { message: 'Routine not found' }
             });
         }
 

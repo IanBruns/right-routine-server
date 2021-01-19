@@ -37,6 +37,12 @@ const RoutinesService = {
             .from('routines')
             .where({ id: routine_id })
             .delete();
+    },
+    updateRoutine(db, routine_id, routineUpdate) {
+        return db
+            .from('routines')
+            .where({ id: routine_id })
+            .update(routineUpdate);
     }
 };
 
