@@ -55,7 +55,7 @@ describe.only(`Routines Endpoints`, function () {
     });
 
     describe('GET /api/routines/:routine_id', () => {
-        context('When the item is not in the database', () => {
+        context('When the routine is not in the database', () => {
             beforeEach('seed users into the database', () => {
                 return helpers.seedUsers(db, testUsers);
             });
@@ -69,6 +69,19 @@ describe.only(`Routines Endpoints`, function () {
                     .expect(404, {
                         error: `Routine not found`
                     });
+            });
+        });
+
+        context.only('When there are routines in the database', () => {
+            beforeEach('Seed the Routines table', () => {
+                return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
+            });
+
+            it('returns 200 and the routine', () => {
+                return supertest(app)
+                    .get(`/api/routines/${testRoutines[0].id}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(200, testRoutine);
             });
         });
     });

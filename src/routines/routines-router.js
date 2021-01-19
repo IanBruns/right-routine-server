@@ -17,13 +17,14 @@ routinesRouter.route('/')
 
 routinesRouter.route('/:routine_id')
     .get(requireAuth, (req, res, next) => {
-        RoutinesService.getById(req.app.get(req.app.get('db'), req.user.id, req.params.routine_id))
+        RoutinesService.getById(req.app.get('db'), req.user.id, parseInt(req.params.routine_id))
             .then(routine => {
                 if (!routine) {
                     return res.status(404).json({
-                        error: 'Routine not Found'
+                        error: 'Routine not found'
                     });
                 }
+                return res.status(200).json(routine);
             })
             .catch(next);
     });

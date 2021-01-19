@@ -20,8 +20,8 @@ const RoutinesService = {
             .from('routines');
     },
     getById(db, assigned_user_id, routine_id) {
-        return RoutinesService.getAllRoutines(db, assigned_user_id)
-            .where({ id: routine_id })
+        return RoutinesService.getUserRoutines(db, assigned_user_id)
+            .where('id', routine_id)
             .first();
     }
 };
