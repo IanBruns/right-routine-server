@@ -94,4 +94,8 @@ describe.only(`Routines Endpoints`, function () {
             });
         });
     });
+
+    describe('POST /api/routines/:routine_id', () => {
+
+    });
 });
