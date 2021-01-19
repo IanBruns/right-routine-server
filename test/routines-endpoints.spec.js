@@ -4,7 +4,7 @@ const supertest = require('supertest');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe.only(`Routines Endpoints`, function () {
+describe(`Routines Endpoints`, function () {
     let db;
 
     const { testUsers, testRoutines, } = helpers.makeExercisesFixtures();
@@ -157,7 +157,7 @@ describe.only(`Routines Endpoints`, function () {
         });
     });
 
-    describe.only(`DELETE /api/routines/:routine_id`, () => {
+    describe(`DELETE /api/routines/:routine_id`, () => {
         context(`Given the item does not exist`, () => {
             beforeEach('Seed Users in the tables', () => {
                 return helpers.seedUsers(db, testUsers);
@@ -172,6 +172,33 @@ describe.only(`Routines Endpoints`, function () {
                     .expect(404, {
                         error: `Routine not found`
                     });
+            });
+        });
+
+        describe(`Given the item exists in the database`, () => {
+            context('If there are no exericses in the database', () => {
+                beforeEach('Seed the routines table without Exercises', () => {
+                    return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
+                });
+
+                it('Returns a 204 and removes the routine from the database', () => {
+                    const deleteId = 1;
+                    const filteredRoutines = testRoutines.filter(routine => {
+                        return (routine.assigned_user == testUser.id
+                            && routine.id != deleteId);
+                    });
+
+                    return supertest(app)
+                        .delete(`/api/routines/${deleteId}`)
+                        .set('Authorization', helpers.makeAuthHeader(testUser))
+                        .expect(204)
+                        .then(res =>
+                            supertest(app)
+                                .get('/api/routines')
+                                .set('Authorization', helpers.makeAuthHeader(testUser))
+                                .expect(filteredRoutines)
+                        );
+                });
             });
         });
     });

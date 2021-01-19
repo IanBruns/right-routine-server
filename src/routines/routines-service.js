@@ -32,6 +32,12 @@ const RoutinesService = {
             .then(([routine]) => routine)
             .then(routine => RoutinesService.getById(db, routine.assigned_user, routine.id));
     },
+    deleteRoutine(db, routine_id) {
+        return db
+            .from('routines')
+            .where({ id: routine_id })
+            .delete();
+    }
 };
 
 module.exports = RoutinesService;
