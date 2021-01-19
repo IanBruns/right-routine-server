@@ -95,7 +95,23 @@ describe.only(`Routines Endpoints`, function () {
         });
     });
 
-    describe('POST /api/routines/:routine_id', () => {
+    describe.only('POST /api/routines', () => {
+        beforeEach('Seed users', () => {
+            return helpers.seedUsers(db, testUsers);
+        });
 
+        it('returns an error when no routine_name is passed into the database', () => {
+            const postRoutineNoName = {
+                routine_name: ''
+            };
+
+            return supertest(app)
+                .post('/api/routines')
+                .set('Authorization', helpers.makeAuthHeader(testUser))
+                .send(postRoutineNoName)
+                .expect(400, {
+                    error: `Missing routine_name in request body`
+                });
+        });
     });
 });

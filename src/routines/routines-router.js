@@ -13,6 +13,16 @@ routinesRouter.route('/')
                 res.json(routines.map(RoutinesService.serializeRoutine));
             })
             .catch(next);
+    })
+    .post(requireAuth, jsonBodyParser, (req, res, next) => {
+        const { routine_name } = req.body;
+        const newRoutine = { routine_name };
+
+        if (newRoutine.routine_name == null || newRoutine.routine_name.length < 1) {
+            return res.status(400).json({
+                error: `Missing routine_name in request body`
+            });
+        }
     });
 
 routinesRouter.route('/:routine_id')
