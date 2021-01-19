@@ -23,7 +23,15 @@ const RoutinesService = {
         return RoutinesService.getUserRoutines(db, assigned_user_id)
             .where('id', routine_id)
             .first();
-    }
+    },
+    addRoutine(db, newRoutine) {
+        return db
+            .insert(newRoutine)
+            .into('routines')
+            .returning('*')
+            .then(([routine]) => routine)
+            .then(routine => RoutinesService.getById(db, routine.assigned_user, routine.id));
+    },
 };
 
 module.exports = RoutinesService;

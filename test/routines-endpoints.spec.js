@@ -1,3 +1,4 @@
+const { expect } = require('chai');
 const knex = require('knex');
 const supertest = require('supertest');
 const app = require('../src/app');
@@ -95,7 +96,7 @@ describe.only(`Routines Endpoints`, function () {
         });
     });
 
-    describe.only('POST /api/routines', () => {
+    describe('POST /api/routines', () => {
         beforeEach('Seed users', () => {
             return helpers.seedUsers(db, testUsers);
         });
@@ -111,6 +112,47 @@ describe.only(`Routines Endpoints`, function () {
                 .send(postRoutineNoName)
                 .expect(400, {
                     error: `Missing routine_name in request body`
+                });
+        });
+
+        it('Returns a 201 and pulls the item in a GET request', () => {
+            const postRoutineCorrect = {
+                routine_name: 'Test routine_name'
+            };
+
+            return supertest(app)
+                .post('/api/routines')
+                .set('Authorization', helpers.makeAuthHeader(testUser))
+                .send(postRoutineCorrect)
+                .expect(201)
+                .expect(res => {
+                    expect(res.body).to.have.property('id');
+                    expect(res.body.routine_name).to.eql(postRoutineCorrect.routine_name);
+                    expect(res.body.assigned_user).to.eql(testUser.id);
+                })
+                .expect(res => {
+                    return db
+                        .from('routines')
+                        .select('*')
+                        .where({ id: res.body.id })
+                        .first()
+                        .then(row => {
+                            expect(row.routine_name).to.eql(postRoutineCorrect.routine_name);
+                            expect(row.assigned_user).to.eql(testUser.id);
+                        });
+                });
+        });
+
+        it('sanitizes an XSS attack', () => {
+            const { maliciousRoutine, expectedRoutine } = helpers.makeMaliciousRoutine(testUser);
+
+            return supertest(app)
+                .post('/api/routines')
+                .set('Authorization', helpers.makeAuthHeader(testUser))
+                .send(maliciousRoutine)
+                .expect(201)
+                .expect(res => {
+                    expect(res.body.routine_name).to.eql(expectedRoutine.routine_name);
                 });
         });
     });

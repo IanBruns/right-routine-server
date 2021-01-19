@@ -83,7 +83,7 @@ function makeExercisesArray(routines) {
 
 function makeMaliciousRoutine(user) {
     const maliciousRoutine = {
-        id: 911,
+        // id: 911,
         routine_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
         assigned_user: user.id,
     };
