@@ -15,6 +15,17 @@ routinesRouter.route('/')
             .catch(next);
     });
 
-// routinesRouter.route('/:routine_id')
+routinesRouter.route('/:routine_id')
+    .get(requireAuth, (req, res, next) => {
+        RoutinesService.getById(req.app.get(req.app.get('db'), req.user.id, req.params.routine_id))
+            .then(routine => {
+                if (!routine) {
+                    return res.status(404).json({
+                        error: 'Routine not Found'
+                    });
+                }
+            })
+            .catch(next);
+    });
 
 module.exports = routinesRouter;
