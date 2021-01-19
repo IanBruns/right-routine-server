@@ -72,7 +72,7 @@ describe.only(`Routines Endpoints`, function () {
             });
         });
 
-        context.only('When there are routines in the database', () => {
+        context('When there are routines in the database', () => {
             beforeEach('Seed the Routines table', () => {
                 return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
             });
@@ -86,9 +86,9 @@ describe.only(`Routines Endpoints`, function () {
 
             it('returns a 404 when a user tries to access a valid routine_id for another user', () => {
                 return supertest(app)
-                    .get(`/api/routines/${testRoutines[testRoutines.length - 1]}`)
+                    .get(`/api/routines/${testRoutines[testRoutines.length - 1].id}`)
                     .set('Authorization', helpers.makeAuthHeader(testUser))
-                    .expect(400, {
+                    .expect(404, {
                         error: `Routine not found`
                     });
             });

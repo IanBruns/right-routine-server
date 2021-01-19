@@ -16,7 +16,8 @@ routinesRouter.route('/')
     });
 
 routinesRouter.route('/:routine_id')
-    .get(requireAuth, (req, res, next) => {
+    .all(requireAuth)
+    .get((req, res, next) => {
         RoutinesService.getById(req.app.get('db'), req.user.id, parseInt(req.params.routine_id))
             .then(routine => {
                 if (!routine) {
