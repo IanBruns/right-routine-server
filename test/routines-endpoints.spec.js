@@ -38,7 +38,7 @@ describe.only(`Routines Endpoints`, function () {
             });
         });
 
-        context('When there are routines in the database for the users', () => {
+        context.only('When there are routines in the database for the users', () => {
             beforeEach('Seed users and routines', () => {
                 return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
             });

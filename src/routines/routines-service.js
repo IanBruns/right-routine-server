@@ -13,11 +13,10 @@ const RoutinesService = {
             .select('*')
             .from('routines');
     },
-    getUserRoutines(db, assigned_user) {
-        //assigned_user is the id of the user in the users table
+    getUserRoutines(db, assigned_user_id) {
         return db
             .select('*')
-            .where({ assigned_user })
+            .where({ assigned_user: assigned_user_id })
             .from('routines');
     },
 };

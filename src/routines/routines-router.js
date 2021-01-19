@@ -15,4 +15,6 @@ routinesRouter.route('/')
             .catch(next);
     });
 
+// routinesRouter.route('/:routine_id')
+
 module.exports = routinesRouter;
