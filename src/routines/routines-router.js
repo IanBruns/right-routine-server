@@ -19,7 +19,6 @@ routinesRouter.route('/:routine_id')
     .get(requireAuth, (req, res, next) => {
         RoutinesService.getById(req.app.get(req.app.get('db'), req.user.id, req.params.routine_id))
             .then(routine => {
-                console.log('then');
                 if (!routine) {
                     return res.status(404).json({
                         error: 'Routine not Found'
