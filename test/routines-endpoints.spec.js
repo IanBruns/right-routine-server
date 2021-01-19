@@ -83,6 +83,15 @@ describe.only(`Routines Endpoints`, function () {
                     .set('Authorization', helpers.makeAuthHeader(testUser))
                     .expect(200, testRoutine);
             });
+
+            it('returns a 404 when a user tries to access a valid routine_id for another user', () => {
+                return supertest(app)
+                    .get(`/api/routines/${testRoutines[testRoutines.length - 1]}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(400, {
+                        error: `Routine not found`
+                    });
+            });
         });
     });
 });
