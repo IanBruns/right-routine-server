@@ -156,4 +156,23 @@ describe.only(`Routines Endpoints`, function () {
                 });
         });
     });
+
+    describe.only(`DELETE /api/routines/:routine_id`, () => {
+        context(`Given the item does not exist`, () => {
+            beforeEach('Seed Users in the tables', () => {
+                return helpers.seedUsers(testUsers);
+            });
+
+            it(`returns a 404 with the Routine not found`, () => {
+                const testId = 1612;
+
+                return supertest(app)
+                    .get(`/api/routines/${testId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(404, {
+                        error: `Routine not found`
+                    });
+            })
+        });
+    });
 });

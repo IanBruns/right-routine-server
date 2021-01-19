@@ -47,6 +47,16 @@ routinesRouter.route('/:routine_id')
                 return res.status(200).json(RoutinesService.serializeRoutine(routine));
             })
             .catch(next);
+    })
+    .delete((req, res, next) => {
+        RoutinesService.getById(req.app.get('db'), req.user.id, parseInt(req.params.routine_id))
+            .then(routine => {
+                if (!routine) {
+                    return res.status(404).json({
+                        error: 'Routine not found'
+                    });
+                }
+            });
     });
 
 module.exports = routinesRouter;
