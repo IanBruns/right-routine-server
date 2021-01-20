@@ -248,7 +248,7 @@ describe(`Routines Endpoints`, function () {
 
         it(`Sends a 404 when the user is trying to update another user's routine`, () => {
             const testId = 4;
-            const validUpdateRoutine = { routine_name: 'New Routine name' }
+            const validUpdateRoutine = { routine_name: 'New Routine name' };
 
             return supertest(app)
                 .patch(`/api/routines/${testId}`)
@@ -257,6 +257,27 @@ describe(`Routines Endpoints`, function () {
                 .expect(404, {
                     error: { message: `Routine not found` }
                 });
+        });
+
+        it('sends a 204 and generates with the updated item', () => {
+            const testId = 1;
+            const updates = { routine_name: 'updated name' };
+            expectedRoutine = {
+                ...testRoutines[testId - 1],
+                ...updates,
+            };
+
+            return supertest(app)
+                .patch(`/api/routines/${testId}`)
+                .set('Authorization', helpers.makeAuthHeader(testUser))
+                .send(updates)
+                .expect(204)
+                .then(res =>
+                    supertest(app)
+                        .get(`/api/routines/${testId}`)
+                        .set('Authorization', helpers.makeAuthHeader(testUser))
+                        .expect(200, expectedRoutine)
+                );
         });
     });
 });

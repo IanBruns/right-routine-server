@@ -48,13 +48,19 @@ routinesRouter.route('/:routine_id')
     })
     .patch(jsonBodyParser, (req, res, next) => {
         const { routine_name } = req.body;
-        const newRoutineName = { routine_name };
+        const fieldsToUpdate = { routine_name };
 
-        if (!newRoutineName || newRoutineName.routine_name.length < 1) {
+        if (!fieldsToUpdate || fieldsToUpdate.routine_name.length < 1) {
             return res.status(400).json({
                 error: { message: `routine_name must be in request body` }
             })
         }
+
+        RoutinesService.updateRoutine(req.app.get('db'), res.routine.id, fieldsToUpdate)
+            .then(numRowsAffected => {
+                res.status(204).end();
+            })
+            .catch();
     })
 
 async function checkValidRoutine(req, res, next) {
