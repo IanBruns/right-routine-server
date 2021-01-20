@@ -176,4 +176,10 @@ describe.only(`Exercises Endpoints`, function () {
             });
         });
     });
+
+    describe('DELETE /:routine_id/exercises/:exercise_id', () => {
+        context('When there are no exercises in the database', () => {
+
+        });
+    });
 });

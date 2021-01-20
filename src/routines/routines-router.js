@@ -62,7 +62,6 @@ routinesRouter.route('/:routine_id')
             })
             .catch();
     })
-    .delete()
 
 async function checkValidRoutine(req, res, next) {
     try {

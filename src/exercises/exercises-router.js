@@ -49,7 +49,13 @@ exercisesRouter.route('/:routine_id/exercises/:exercise_id')
     .all(checkValidExercise)
     .get((req, res, next) => {
         return res.json(ExercisesService.serializeExercise(res.exercise));
-    });
+    })
+    .delete((req, res, next) => {
+        ExercisesService.deleteExercise(req.app.get('db'), res.exercise.id)
+            .then(numRowsAffected => {
+                return res.status(204).end();
+            })
+    })
 
 async function checkValidExercise(req, res, next) {
     try {
