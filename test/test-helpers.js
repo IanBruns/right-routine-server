@@ -53,30 +53,35 @@ function makeExercisesArray(routines) {
             exercise_name: 'Exercise-1',
             exercise_description: 'Description-1',
             assigned_routine: routines[0].id,
+            assigned_user: routines[0].assigned_user,
         },
         {
             id: 2,
             exercise_name: 'Exercise-2',
             exercise_description: 'Description-2',
-            assigned_routine: routines[1].id,
+            assigned_routine: routines[0].id,
+            assigned_user: routines[0].assigned_user,
         },
         {
             id: 3,
             exercise_name: 'Exercise-3',
             exercise_description: 'Description-3',
             assigned_routine: routines[1].id,
+            assigned_user: routines[1].assigned_user,
         },
         {
             id: 4,
             exercise_name: 'Exercise-4',
             exercise_description: 'Description-4',
-            assigned_routine: routines[0].id,
+            assigned_routine: routines[2].id,
+            assigned_user: routines[2].assigned_user,
         },
         {
             id: 5,
             exercise_name: 'Exercise-5',
             exercise_description: 'Description-5',
-            assigned_routine: routines[0].id,
+            assigned_routine: routines[2].id,
+            assigned_user: routines[2].assigned_user,
         },
     ];
 }

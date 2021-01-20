@@ -4,7 +4,7 @@ const supertest = require('supertest');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe(`Routines Endpoints`, function () {
+describe.only(`Exercises Endpoints`, function () {
     let db;
 
     const { testUsers, testRoutines, testExercises } = helpers.makeExercisesFixtures();
@@ -25,4 +25,21 @@ describe(`Routines Endpoints`, function () {
     before('cleanup', () => helpers.cleanTables(db));
 
     afterEach('cleanup', () => helpers.cleanTables(db));
+
+    describe.only('GET /api/routines/:routines_id/exercises', () => {
+        context(`When there are no execercises in the database`, () => {
+            beforeEach('Seed with no exercises', () => {
+                helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
+            });
+
+            it(`returns a 200 and an empty array`, () => {
+                const testId = 1;
+
+                return supertest(app)
+                    .get(`/api/routines/${testId}/exercises`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(200, []);
+            });
+        });
+    });
 });

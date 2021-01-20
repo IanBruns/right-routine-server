@@ -6,9 +6,18 @@ const { requireAuth } = require('../middleware/api-auth');
 const exercisesRouter = express.Router();
 const jsonBodyParser = express.json();
 
-exercisesRouter.route('/')
-    .get(requireAuth, (req, res, next) => {
-
-    })
+exercisesRouter.route('/:routine_id/exercises')
+    .all(requireAuth)
+    .get((req, res, next) => {
+        ExercisesService.getRoutineExercises(
+            req.app.get('db'),
+            req.user.id,
+            parseInt(req.params.routine_id)
+        )
+            .then(exercises => {
+                return res.json(exercises.map(ExercisesService.serializeExercise));
+            })
+            .catch(next);
+    });
 
 module.exports = exercisesRouter;

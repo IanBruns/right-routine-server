@@ -22,7 +22,7 @@ app.use(cors());
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/routines', routinesRouter);
-app.user('/api/routines/:routines_id/exercises', exercisesRouter);
+app.use('/api/routines', exercisesRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, world!');
