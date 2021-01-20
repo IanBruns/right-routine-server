@@ -210,6 +210,25 @@ describe.only(`Exercises Endpoints`, function () {
                         error: { message: 'Exercise not found' }
                     });
             });
+
+            it('Returns a 204 and the exercise is removed from the tables', () => {
+                const deleteId = 1;
+                const filteredExercises = testExercises.filter(exercise => {
+                    return (exercise.assigned_routine == testRoutine.id
+                        && exercise.id != deleteId);
+                });
+
+                return supertest(app)
+                    .delete(`/api/routines/${deleteId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(204)
+                    .then(res =>
+                        supertest(app)
+                            .get(`/api/routines/${testRoutineId}/exercises/${deleteId}`)
+                            .set('Authorization', helpers.makeAuthHeader(testUser))
+                            .expect(filteredExercises)
+                    );
+            });
         });
     });
 });
