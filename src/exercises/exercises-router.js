@@ -5,3 +5,7 @@ const { requireAuth } = require('../middleware/api-auth');
 
 const exercisesRouter = express.Router();
 const jsonBodyParser = express.json();
+
+
+
+module.exports = exercisesRouter;
