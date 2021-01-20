@@ -29,7 +29,7 @@ describe.only(`Exercises Endpoints`, function () {
     describe.only('GET /api/routines/:routines_id/exercises', () => {
         context(`When there are no execercises in the database`, () => {
             beforeEach('Seed with no exercises', () => {
-                helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
+                return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
             });
 
             it(`returns a 200 and an empty array`, () => {
@@ -39,6 +39,22 @@ describe.only(`Exercises Endpoints`, function () {
                     .get(`/api/routines/${testId}/exercises`)
                     .set('Authorization', helpers.makeAuthHeader(testUser))
                     .expect(200, []);
+            });
+        });
+
+        context('When there are exercises in the database', () => {
+            beforeEach('Seed with exercises', () => {
+                return helpers.seedRoutinesTable(db, testUsers, testRoutines, testExercises);
+            });
+
+            it('return a 200 and the exercises for that routine', () => {
+                const testId = 1;
+                const expectedRoutines = testExercises.filter(exercise => exercise.assigned_routine == testId)
+
+                return supertest(app)
+                    .get(`/api/routines/${testId}/exercises`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(200, expectedRoutines);
             });
         });
     });
