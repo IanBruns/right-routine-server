@@ -243,7 +243,20 @@ describe(`Routines Endpoints`, function () {
                 .send(updateRoutineNoName)
                 .expect(400, {
                     error: { message: `routine_name must be in request body` }
-                })
+                });
+        });
+
+        it(`Sends a 404 when the user is trying to update another user's routine`, () => {
+            const testId = 4;
+            const validUpdateRoutine = { routine_name: 'New Routine name' }
+
+            return supertest(app)
+                .patch(`/api/routines/${testId}`)
+                .set('Authorization', helpers.makeAuthHeader(testUser))
+                .send(validUpdateRoutine)
+                .expect(404, {
+                    error: { message: `Routine not found` }
+                });
         });
     });
 });
