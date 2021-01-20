@@ -228,7 +228,7 @@ describe(`Routines Endpoints`, function () {
         });
     });
 
-    describe.only(`PATCH /api/routines/:routine_id`, () => {
+    describe(`PATCH /api/routines/:routine_id`, () => {
         beforeEach('seed the routines table', () => {
             return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
         });
