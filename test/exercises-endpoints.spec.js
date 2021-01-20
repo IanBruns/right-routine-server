@@ -149,7 +149,12 @@ describe.only(`Exercises Endpoints`, function () {
                 .post(`/api/routines/${testRoutineId}/exercises`)
                 .set('Authorization', helpers.makeAuthHeader(testUser))
                 .send(maliciousExercise)
-                .expect(201, expectedExercise);
+                .expect(201)
+                .expect(res => {
+                    expect(res.body.exercise_name).to.eql(expectedExercise.exercise_name);
+                    expect(res.body.exercise_description).to.eql(expectedExercise.exercise_description);
+                    expect(res.body.assigned_routine).to.eql(expectedExercise.assigned_routine);
+                });
         });
     });
 });
