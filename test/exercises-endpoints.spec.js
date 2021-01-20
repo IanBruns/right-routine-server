@@ -104,7 +104,7 @@ describe.only(`Exercises Endpoints`, function () {
         });
     });
 
-    describe.only('POST /:routine_id/exercises/:exercise_id', () => {
+    describe('POST /:routine_id/exercises/:exercise_id', () => {
         beforeEach('Seed the database with routines', () => {
             return helpers.seedRoutinesTable(db, testUsers, testRoutines, testExercises);
         });
@@ -155,6 +155,25 @@ describe.only(`Exercises Endpoints`, function () {
                     expect(res.body.exercise_description).to.eql(expectedExercise.exercise_description);
                     expect(res.body.assigned_routine).to.eql(expectedExercise.assigned_routine);
                 });
+        });
+
+        ['exercise_name', 'exercise_description'].forEach(field => {
+            const newExercise = {
+                exercise_name: 'Test Exercise',
+                exercise_description: 'Test Description',
+            };
+
+            it(`Responds with a 400 when the ${field} is missing`, () => {
+                delete newExercise[field];
+
+                return supertest(app)
+                    .post(`/api/routines/${testRoutineId}/exercises`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .send(newExercise)
+                    .expect(400, {
+                        error: { message: `Missing ${field} in request body` }
+                    });
+            });
         });
     });
 });

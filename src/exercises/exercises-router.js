@@ -30,7 +30,7 @@ exercisesRouter.route('/:routine_id/exercises')
         for (const [key, value] of Object.entries(newExercise))
             if (value == null || value.length < 1)
                 return res.status(400).json({
-                    error: `Missing '${key}' in request body`
+                    error: { message: `Missing ${key} in request body` }
                 })
 
         newExercise.assigned_user = req.user.id;
