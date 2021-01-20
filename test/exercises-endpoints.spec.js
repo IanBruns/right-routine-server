@@ -141,5 +141,15 @@ describe.only(`Exercises Endpoints`, function () {
                         });
                 });
         });
+
+        it('Sanitizes an xss attack', () => {
+            const { maliciousExercise, expectedExercise } = helpers.makeMaliciousExercise(testRoutine);
+
+            return supertest(app)
+                .post(`/api/routines/${testRoutineId}/exercises`)
+                .set('Authorization', helpers.makeAuthHeader(testUser))
+                .send(maliciousExercise)
+                .expect(201, expectedExercise);
+        });
     });
 });

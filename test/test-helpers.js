@@ -105,15 +105,14 @@ function makeMaliciousRoutine(user) {
 
 function makeMaliciousExercise(routine) {
     const maliciousExercise = {
-        id: 911,
         exercise_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
         exercise_description: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
-        assigned_routine: routine.id,
     };
     const expectedExercise = {
         ...maliciousExercise,
         exercise_name: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
         exercise_description: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
+        assigned_routine: routine.id,
     };
 
     return {
