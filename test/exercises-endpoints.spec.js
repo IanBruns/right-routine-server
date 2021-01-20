@@ -105,9 +105,41 @@ describe.only(`Exercises Endpoints`, function () {
     });
 
     describe.only('POST /:routine_id/exercises/:exercise_id', () => {
-        beforeEach('Seed')
-        it('Returns a 201 and pulls the item in a GET request', () => {
+        beforeEach('Seed the database with routines', () => {
+            return helpers.seedRoutinesTable(db, testUsers, testRoutines, testExercises);
+        });
 
+        it('Returns a 201 and pulls the item in a GET request', () => {
+            const newExercise = {
+                exercise_name: 'Test Exercise',
+                exercise_description: 'Test Description',
+            };
+
+            return supertest(app)
+                .post(`/api/routines/${testRoutineId}/exercises`)
+                .set('Authorization', helpers.makeAuthHeader(testUser))
+                .send(newExercise)
+                .expect(201)
+                .expect(res => {
+                    expect(res.body).to.have.property('id');
+                    expect(res.body.exercise_name).to.eql(newExercise.exercise_name);
+                    expect(res.body.exercise_description).to.eql(newExercise.exercise_description);
+                    expect(res.body.assigned_user).to.eql(testUser.id);
+                    expect(res.body.assigned_routine).to.eql(testRoutine.id);
+                })
+                .expect(res => {
+                    return db
+                        .from('exercises')
+                        .select('*')
+                        .where({ id: res.body.id })
+                        .first()
+                        .then(row => {
+                            expect(row.exercise_name).to.eql(newExercise.exercise_name);
+                            expect(row.exercise_description).to.eql(newExercise.exercise_description);
+                            expect(row.assigned_user).to.eql(testUser.id);
+                            expect(row.routine).to.eql(testRoutine.id);
+                        });
+                });
         });
     });
 });

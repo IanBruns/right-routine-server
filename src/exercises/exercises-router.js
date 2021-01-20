@@ -35,8 +35,7 @@ exercisesRouter.route('/:routine_id/exercises')
 
         newExercise.assigned_user = req.user.id;
         newExercise.assigned_routine = parseInt(req.params.routine_id);
-
-        ExercisesService.addRoutine(req.app.get('db'), newRoutine)
+        ExercisesService.addExercise(req.app.get('db'), newExercise)
             .then(exercise => {
                 return res.status(201)
                     .location(path.posix.join(req.originalUrl, `/${exercise.id}`))
