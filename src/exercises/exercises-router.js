@@ -15,9 +15,42 @@ exercisesRouter.route('/:routine_id/exercises')
             parseInt(req.params.routine_id)
         )
             .then(exercises => {
+                // for (let i = exercises.length - 1; i > 0; i--) {
+                //     let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+                //     [exercises[i], exercises[j]] = [exercises[j], exercises[i]];
+                // }
                 return res.json(exercises.map(ExercisesService.serializeExercise));
             })
             .catch(next);
     });
+
+exercisesRouter.route('/:routine_id/exercises/:exercise_id')
+    .all(requireAuth)
+    .all(checkValidExercise)
+    .get((req, res, next) => {
+        return res.json(ExercisesService.serializeExercise(res.exercise));
+    });
+
+async function checkValidExercise(req, res, next) {
+    try {
+        const exercise = await ExercisesService.getById(
+            req.app.get('db'),
+            req.user.id,
+            parseInt(req.params.routine_id),
+            parseInt(req.params.exercise_id),
+        )
+
+        if (!exercise) {
+            return res.status(404).json({
+                error: { message: 'Exercise not found' }
+            });
+        }
+
+        res.exercise = exercise;
+        next()
+    } catch (error) {
+        next(error);
+    }
+}
 
 module.exports = exercisesRouter;

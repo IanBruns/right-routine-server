@@ -10,7 +10,8 @@ describe.only(`Exercises Endpoints`, function () {
     const { testUsers, testRoutines, testExercises } = helpers.makeExercisesFixtures();
     const testUser = testUsers[0];
     const testRoutine = testRoutines[0];
-    const textExercise = testExercises[0];
+    const testExercise = testExercises[0];
+    const testRoutineId = 1;
 
     before('make knex instance', () => {
         db = knex({
@@ -33,10 +34,9 @@ describe.only(`Exercises Endpoints`, function () {
             });
 
             it(`returns a 200 and an empty array`, () => {
-                const testId = 1;
 
                 return supertest(app)
-                    .get(`/api/routines/${testId}/exercises`)
+                    .get(`/api/routines/${testRoutineId}/exercises`)
                     .set('Authorization', helpers.makeAuthHeader(testUser))
                     .expect(200, []);
             });
@@ -48,13 +48,58 @@ describe.only(`Exercises Endpoints`, function () {
             });
 
             it('return a 200 and the exercises for that routine', () => {
-                const testId = 1;
-                const expectedRoutines = testExercises.filter(exercise => exercise.assigned_routine == testId)
+                const expectedRoutines = testExercises.filter(exercise =>
+                    exercise.assigned_routine == testRoutineId);
 
                 return supertest(app)
-                    .get(`/api/routines/${testId}/exercises`)
+                    .get(`/api/routines/${testRoutineId}/exercises`)
                     .set('Authorization', helpers.makeAuthHeader(testUser))
                     .expect(200, expectedRoutines);
+            });
+        });
+    });
+
+    describe('GET /api/routines/:routines_id/exercises/:exercises_id', () => {
+        context(`When the item doesn't exist`, () => {
+            beforeEach('Seed the table with no exercises', () => {
+                return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
+            });
+
+            it(`Returns a 404 for exercise not found`, () => {
+                const testInvalidExerciseId = 1612;
+
+                return supertest(app)
+                    .get(`/api/routines/${testRoutineId}/exercises/${testInvalidExerciseId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(404, {
+                        error: { message: 'Exercise not found' }
+                    });
+            });
+        });
+
+        context('When the item exists', () => {
+            beforeEach('Seed routines with exercises', () => {
+                return helpers.seedRoutinesTable(db, testUsers, testRoutines, testExercises);
+            });
+
+            it(`Returns a 200 and the requested exercise`, () => {
+                const testValidExerciseId = testExercise.id;
+
+                return supertest(app)
+                    .get(`/api/routines/${testRoutineId}/exercises/${testValidExerciseId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(200, testExercise);
+            });
+
+            it(`returns a 404 when trying to access another user's exercise`, () => {
+                const testValidExerciseOtherUser = 3;
+
+                return supertest(app)
+                    .get(`/api/routines/${testRoutineId}/exercises/${testValidExerciseOtherUser}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(404, {
+                        error: { message: 'Exercise not found' }
+                    });
             });
         });
     });
