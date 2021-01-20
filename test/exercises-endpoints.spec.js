@@ -194,5 +194,22 @@ describe.only(`Exercises Endpoints`, function () {
                     });
             });
         });
+
+        context('When here are exercises in the database', () => {
+            beforeEach('Seed tables with routines and exercises', () => {
+                return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
+            });
+
+            it('Returns a 404 when trying to delete another users exrcises', () => {
+                const testId = 4;
+
+                return supertest(app)
+                    .get(`/api/routines/${testRoutineId}/exercises/${testId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(404, {
+                        error: { message: 'Exercise not found' }
+                    });
+            });
+        });
     });
 });
