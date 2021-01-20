@@ -22,7 +22,28 @@ exercisesRouter.route('/:routine_id/exercises')
                 return res.json(exercises.map(ExercisesService.serializeExercise));
             })
             .catch(next);
-    });
+    })
+    .post(jsonBodyParser, (req, res, next) => {
+        const { exercise_name, exercise_description } = req.body;
+        const newExercise = { exercise_name, exercise_description };
+
+        for (const [key, value] of Object.entries(newExercise))
+            if (value == null || value.length < 1)
+                return res.status(400).json({
+                    error: `Missing '${key}' in request body`
+                })
+
+        newExercise.assigned_user = req.user.id;
+        newExercise.assigned_routine = parseInt(req.params.routine_id);
+
+        ExercisesService.addRoutine(req.app.get('db'), newRoutine)
+            .then(exercise => {
+                return res.status(201)
+                    .location(path.posix.join(req.originalUrl, `/${exercise.id}`))
+                    .json(ExercisesService.serializeExercise(exercise));
+            })
+            .catch(next);
+    })
 
 exercisesRouter.route('/:routine_id/exercises/:exercise_id')
     .all(requireAuth)

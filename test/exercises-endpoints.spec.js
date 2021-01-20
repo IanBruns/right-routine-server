@@ -27,7 +27,7 @@ describe.only(`Exercises Endpoints`, function () {
 
     afterEach('cleanup', () => helpers.cleanTables(db));
 
-    describe.only('GET /api/routines/:routines_id/exercises', () => {
+    describe('GET /api/routines/:routines_id/exercises', () => {
         context(`When there are no execercises in the database`, () => {
             beforeEach('Seed with no exercises', () => {
                 return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
@@ -101,6 +101,13 @@ describe.only(`Exercises Endpoints`, function () {
                         error: { message: 'Exercise not found' }
                     });
             });
+        });
+    });
+
+    describe.only('POST /:routine_id/exercises/:exercise_id', () => {
+        beforeEach('Seed')
+        it('Returns a 201 and pulls the item in a GET request', () => {
+
         });
     });
 });
