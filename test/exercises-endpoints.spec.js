@@ -177,9 +177,22 @@ describe.only(`Exercises Endpoints`, function () {
         });
     });
 
-    describe('DELETE /:routine_id/exercises/:exercise_id', () => {
+    describe.only('DELETE /:routine_id/exercises/:exercise_id', () => {
         context('When there are no exercises in the database', () => {
+            beforeEach('Seed the Routines in the database no exercises', () => {
+                return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
+            });
 
+            it('Returns a 404 for item not found', () => {
+                const testId = 1612;
+
+                return supertest(app)
+                    .delete(`/api/routines/${testRoutineId}/exercises/${testId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(404, {
+                        error: { message: 'Exercise not found' }
+                    });
+            });
         });
     });
 });
