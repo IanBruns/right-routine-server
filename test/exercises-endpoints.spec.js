@@ -232,7 +232,71 @@ describe.only(`Exercises Endpoints`, function () {
         });
     });
 
-    describe('PATCH /:routine_id/exercises/:exercise_id', () => {
+    describe.only('PATCH /:routine_id/exercises/:exercise_id', () => {
+        context(`Given no exercises`, () => {
+            beforeEach('Seed database without exercises', () => {
+                return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
+            });
 
-    })
+            it(`Returns a 404 for exercise not found`, () => {
+                const testInvalidExerciseId = 1612;
+
+                return supertest(app)
+                    .patch(`/api/routines/${testRoutineId}/exercises/${testInvalidExerciseId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(404, {
+                        error: { message: 'Exercise not found' }
+                    });
+            });
+        });
+
+        context('Given exercises in the table', () => {
+            beforeEach('Seed the table with users', () => {
+                return helpers.seedRoutinesTable(db, testUsers, testRoutines, testExercises);
+            });
+
+            it('returns a  404 and an error for unfound exercise when id invalid', () => {
+                it(`Returns a 404 for exercise not found`, () => {
+                    const testInvalidExerciseId = 1612;
+
+                    return supertest(app)
+                        .patch(`/api/routines/${testRoutineId}/exercises/${testInvalidExerciseId}`)
+                        .set('Authorization', helpers.makeAuthHeader(testUser))
+                        .expect(404, {
+                            error: { message: 'Exercise not found' }
+                        });
+                });
+            });
+
+            it('Rejects with a 400 when no relevent requests are passed for updating', () => {
+                const updateId = 1;
+                const badUpdate = {
+                    best_musical_artist: 'Carly Rae Jepsen'
+                };
+
+                return supertest(app)
+                    .patch(`/api/routines/${testRoutineId}/exercises/${updateId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .send(badUpdate)
+                    .expect(400, {
+                        error: { message: `exercise_name or exercise_description must be in request body` }
+                    });
+            });
+
+            it(`Sends a 404 when trying to update another user's rouine`, () => {
+                const updateId = 5;
+                const validUpdate = {
+                    routine_name: 'Carly Rae Jepsen'
+                };
+
+                return supertest(app)
+                    .patch(`/api/routines/${testRoutineId}/exercises/${updateId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .send(validUpdate)
+                    .expect(404, {
+                        error: { message: `Exercise not found` }
+                    });
+            });
+        });
+    });
 });

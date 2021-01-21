@@ -58,7 +58,7 @@ exercisesRouter.route('/:routine_id/exercises/:exercise_id')
     })
     .patch(jsonBodyParser, (req, res, next) => {
         const { exercise_name, exercise_description } = req.body;
-        const fieldsToUpdate = { routine_name, exercise_description };
+        const fieldsToUpdate = { exercise_name, exercise_description };
 
         const numberOfValues = Object.values(fieldsToUpdate).filter(Boolean).length
         if (numberOfValues === 0) {
