@@ -197,7 +197,7 @@ describe.only(`Exercises Endpoints`, function () {
 
         context('When here are exercises in the database', () => {
             beforeEach('Seed tables with routines and exercises', () => {
-                return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
+                return helpers.seedRoutinesTable(db, testUsers, testRoutines, testExercises);
             });
 
             it('Returns a 404 when trying to delete another users exrcises', () => {
@@ -212,19 +212,19 @@ describe.only(`Exercises Endpoints`, function () {
             });
 
             it('Returns a 204 and the exercise is removed from the tables', () => {
-                const deleteId = 1;
+                const deleteId = 2;
                 const filteredExercises = testExercises.filter(exercise => {
                     return (exercise.assigned_routine == testRoutine.id
                         && exercise.id != deleteId);
                 });
 
                 return supertest(app)
-                    .delete(`/api/routines/${deleteId}`)
+                    .delete(`/api/routines/${testRoutineId}/exercises/${deleteId}`)
                     .set('Authorization', helpers.makeAuthHeader(testUser))
                     .expect(204)
                     .then(res =>
                         supertest(app)
-                            .get(`/api/routines/${testRoutineId}/exercises/${deleteId}`)
+                            .get(`/api/routines/${testRoutineId}/exercises`)
                             .set('Authorization', helpers.makeAuthHeader(testUser))
                             .expect(filteredExercises)
                     );
