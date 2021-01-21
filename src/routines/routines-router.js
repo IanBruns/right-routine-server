@@ -60,7 +60,7 @@ routinesRouter.route('/:routine_id')
             .then(numRowsAffected => {
                 res.status(204).end();
             })
-            .catch();
+            .catch(next);
     })
 
 async function checkValidRoutine(req, res, next) {
