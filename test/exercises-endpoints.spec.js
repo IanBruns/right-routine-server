@@ -4,7 +4,7 @@ const supertest = require('supertest');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe.only(`Exercises Endpoints`, function () {
+describe(`Exercises Endpoints`, function () {
     let db;
 
     const { testUsers, testRoutines, testExercises } = helpers.makeExercisesFixtures();
@@ -232,7 +232,7 @@ describe.only(`Exercises Endpoints`, function () {
         });
     });
 
-    describe.only('PATCH /:routine_id/exercises/:exercise_id', () => {
+    describe('PATCH /:routine_id/exercises/:exercise_id', () => {
         context(`Given no exercises`, () => {
             beforeEach('Seed database without exercises', () => {
                 return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);
@@ -296,6 +296,31 @@ describe.only(`Exercises Endpoints`, function () {
                     .expect(404, {
                         error: { message: `Exercise not found` }
                     });
+            });
+
+            it(`Sends a 204 back and the updated item is updated`, () => {
+                const updateId = 1;
+                const updates = {
+                    exercise_name: 'When I was a young Boy',
+                    exercise_description: 'My father took me into the city to see a marching band'
+                };
+
+                const expectedExercise = {
+                    ...testExercises[updateId - 1],
+                    ...updates
+                }
+
+                return supertest(app)
+                    .patch(`/api/routines/${testRoutineId}/exercises/${updateId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .send(updates)
+                    .expect(204)
+                    .then(res =>
+                        supertest(app)
+                            .get(`/api/routines/${testRoutineId}/exercises/${updateId}`)
+                            .set('Authorization', helpers.makeAuthHeader(testUser))
+                            .expect(200, expectedExercise)
+                    );
             });
         });
     });

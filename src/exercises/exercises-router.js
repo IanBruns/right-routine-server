@@ -67,11 +67,11 @@ exercisesRouter.route('/:routine_id/exercises/:exercise_id')
             })
         }
 
-        // RoutinesService.updateRoutine(req.app.get('db'), res.routine.id, fieldsToUpdate)
-        //     .then(numRowsAffected => {
-        //         res.status(204).end();
-        //     })
-        //     .catch(next);
+        ExercisesService.updateExercise(req.app.get('db'), res.exercise.id, fieldsToUpdate)
+            .then(numRowsAffected => {
+                res.status(204).end();
+            })
+            .catch(next);
     });
 
 async function checkValidExercise(req, res, next) {
