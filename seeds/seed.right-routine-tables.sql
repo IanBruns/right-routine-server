@@ -51,7 +51,7 @@ VALUES
 ('Low Row', 'Lats bby', 6, 3),
 ('Pull Downs', null, 6, 3),
 ('Pull Ups', null, 6, 3),
-('Deadlift', 'Deadlyft', 6. 3),
+('Deadlift', 'Deadlyft', 6, 3),
 ('Wide Row', null, 6, 3);
 
 COMMIT;
