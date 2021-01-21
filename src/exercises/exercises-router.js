@@ -15,10 +15,10 @@ exercisesRouter.route('/:routine_id/exercises')
             parseInt(req.params.routine_id)
         )
             .then(exercises => {
-                // for (let i = exercises.length - 1; i > 0; i--) {
-                //     let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
-                //     [exercises[i], exercises[j]] = [exercises[j], exercises[i]];
-                // }
+                for (let i = exercises.length - 1; i > 0; i--) {
+                    let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+                    [exercises[i], exercises[j]] = [exercises[j], exercises[i]];
+                }
                 return res.json(exercises.map(ExercisesService.serializeExercise));
             })
             .catch(next);
