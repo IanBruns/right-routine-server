@@ -38,7 +38,7 @@ VALUES
 ('Skull Crusher', 'Ouch', 3, 2),
 ('Cable Pull Down', null, 3, 2),
 ('Preacher Curl', 'The Iron Temple', 3, 2),
-('Shrugs', 'I dunno', 4), 2,
+('Shrugs', 'I dunno', 4, 2),
 ('Overhead press', null, 4, 2),
 ('Front Raise', 'Anterior delts', 4, 2),
 ('Lateral Raise', null, 4, 2),
