@@ -48,6 +48,8 @@ describe(`Exercises Endpoints`, function () {
             });
 
             it('return a 200 and the exercises for that routine', () => {
+                //This test will currently fail due to a randomizer between
+                //lines 18 and 21, this will pass if that is commented out
                 const expectedRoutines = testExercises.filter(exercise =>
                     exercise.assigned_routine == testRoutineId);
 
