@@ -56,23 +56,6 @@ exercisesRouter.route('/:routine_id/exercises/:exercise_id')
                 return res.status(204).end();
             })
     })
-    .patch(jsonBodyParser, (req, res, next) => {
-        const { exercise_name, exercise_description } = req.body;
-        const fieldsToUpdate = { exercise_name, exercise_description };
-
-        const numberOfValues = Object.values(fieldsToUpdate).filter(Boolean).length
-        if (numberOfValues === 0) {
-            return res.status(400).json({
-                error: { message: `exercise_name or exercise_description must be in request body` }
-            })
-        }
-
-        ExercisesService.updateExercise(req.app.get('db'), res.exercise.id, fieldsToUpdate)
-            .then(numRowsAffected => {
-                res.status(204).end();
-            })
-            .catch(next);
-    });
 
 async function checkValidExercise(req, res, next) {
     try {
