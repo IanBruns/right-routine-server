@@ -1,26 +1,44 @@
-# Express Boilerplate!
+# Introduction
 
-This is a boilerplate project used for starting new projects!
+Hello!
 
-## Set up
+This is an api done entirely in node.js/express that is meant to:
+A) Store users and their passwords through hashing and creating a jason web token
+B) Assign execise "routines" to that user
+C) assign exercises to the routines and the user
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+## Use Cases
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+The Use cases for this are pretty focused, this is for users who create their own workouts
+and routines based on what serves them.  Best used with the client created along side this
+API.  Repo found here: https://github.com/IanBruns/right-routine-client
 
-## Scripts
+## Authorization
 
-Start the application `npm start`
+Every API request will require a 'bearer ' token created by the json web token library,
+there are no elements that does not require authoriztion of a signin.  3 dummy accounts have
+been provided in the seed file
 
-Start nodemon for the application `npm run dev`
+No API key required for access
 
-Run the tests `npm test`
+## Responses
 
-## Deploying
+Outside of GET requests, you will not recieve a lot of success messages, most responses come
+from error in this format:
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's main branch.
+{
+  error: {Message: `this would be the message`}
+}
+
+## Status Codes
+
+Right Routine returns the following status codes in its API:
+
+| Status Code | Description |
+| :--- | :--- |
+| 200 | `OK` |
+| 201 | `CREATED` |
+| 204 | `NO CONTENT` |
+| 400 | `BAD REQUEST` |
+| 404 | `NOT FOUND` |
+| 500 | `INTERNAL SERVER ERROR` |
