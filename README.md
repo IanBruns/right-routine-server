@@ -13,6 +13,24 @@ The Use cases for this are pretty focused, this is for users who create their ow
 and routines based on what serves them.  Best used with the client created along side this
 API.  Repo found here: https://github.com/IanBruns/right-routine-client
 
+## Endpoints
+
+1) /api/auth
+
+The Auth endpoint is for when registered users are logging in to verify their details with
+what is in the database
+
+2) /api/users
+
+The Users endpoint is for registering a user to use Right Routine, it validates the password
+and checks to make sure the user id has not been taken.  It also hashes the password
+
+3) /api/routines
+
+There are 2 main points in the routines endpoint, in 1, it pulls the routines that are assigned
+to the user, and then a separate endpoint /routines/:routine_id/exercises for the exercises that
+are assigned to that routine, which is again assigned to that user
+
 ## Authorization
 
 Every API request will require a 'bearer ' token created by the json web token library,
