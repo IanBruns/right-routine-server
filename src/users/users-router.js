@@ -6,7 +6,7 @@ const usersRouter = express.Router();
 const jsonBodyParser = express.json();
 
 usersRouter
-    .post('/', jsonBodyParser, (req, res, next) => {
+    .post('/', jsonBodyParser, async function (req, res, next) {
         const { password, user_name } = req.body;
 
         for (const field of ['user_name', 'password'])
@@ -20,34 +20,30 @@ usersRouter
         if (passwordError)
             return res.status(400).json({ error: passwordError });
 
-        UsersService.hasUserWithUserName(
+        const hasUserWithUserName = await UsersService.hasUserWithUserName(
             req.app.get('db'),
             user_name
-        )
-            .then(hasUserWithUserName => {
-                if (hasUserWithUserName)
-                    return res.status(400).json({ error: `Username already taken` });
+        );
 
-                return UsersService.hashPassword(password)
-                    .then(hashedPassword => {
-                        const newUser = {
-                            user_name,
-                            password: hashedPassword,
-                        };
+        if (hasUserWithUserName)
+            return res.status(400).json({ error: `Username already taken` });
 
-                        return UsersService.insertUser(
-                            req.app.get('db'),
-                            newUser
-                        )
-                            .then(user => {
-                                res
-                                    .status(201)
-                                    .location(path.posix.join(req.originalUrl, `/${user.id}`))
-                                    .json(UsersService.serializeUser(user));
-                            });
-                    });
-            })
-            .catch(next);
+        const hashedPassword = await UsersService.hashPassword(password);
+
+        const newUser = {
+            user_name,
+            password: hashedPassword,
+        };
+
+        const user = await UsersService.insertUser(
+            req.app.get('db'),
+            newUser
+        );
+
+        return res
+            .status(201)
+            .location(path.posix.join(req.originalUrl, `/${user.id}`))
+            .json(UsersService.serializeUser(user));
     });
 
 module.exports = usersRouter;
