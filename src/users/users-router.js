@@ -16,7 +16,6 @@ usersRouter
                 });
 
         const passwordError = UsersService.validatePassword(password);
-
         if (passwordError)
             return res.status(400).json({ error: passwordError });
 
@@ -24,17 +23,14 @@ usersRouter
             req.app.get('db'),
             user_name
         );
-
         if (hasUserWithUserName)
             return res.status(400).json({ error: `Username already taken` });
-
+            
         const hashedPassword = await UsersService.hashPassword(password);
-
         const newUser = {
             user_name,
             password: hashedPassword,
         };
-
         const user = await UsersService.insertUser(
             req.app.get('db'),
             newUser
