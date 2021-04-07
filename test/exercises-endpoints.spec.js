@@ -179,7 +179,7 @@ describe(`Exercises Endpoints`, function () {
         });
     });
 
-    describe.only('DELETE /:routine_id/exercises/:exercise_id', () => {
+    describe('DELETE /:routine_id/exercises/:exercise_id', () => {
         context('When there are no exercises in the database', () => {
             beforeEach('Seed the Routines in the database no exercises', () => {
                 return helpers.seedRoutinesTable(db, testUsers, testRoutines, []);

@@ -14,7 +14,7 @@ routinesRouter.route('/')
             })
             .catch(next);
     })
-    .post(requireAuth, jsonBodyParser, (req, res, next) => {
+    .post(requireAuth, jsonBodyParser, async (req, res, next) => {
         const { routine_name } = req.body;
         const newRoutine = { routine_name };
 
@@ -25,13 +25,10 @@ routinesRouter.route('/')
         }
         newRoutine.assigned_user = req.user.id;
 
-        RoutinesService.addRoutine(req.app.get('db'), newRoutine)
-            .then(routine => {
-                return res.status(201)
-                    .location(path.posix.join(req.originalUrl, `/${routine.id}`))
-                    .json(RoutinesService.serializeRoutine(routine));
-            })
-            .catch(next);
+        routine = await RoutinesService.addRoutine(req.app.get('db'), newRoutine)
+        return res.status(201)
+            .location(path.posix.join(req.originalUrl, `/${routine.id}`))
+            .json(RoutinesService.serializeRoutine(routine));
     });
 
 routinesRouter.route('/:routine_id')
