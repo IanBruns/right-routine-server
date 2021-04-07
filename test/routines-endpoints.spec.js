@@ -4,7 +4,7 @@ const supertest = require('supertest');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe(`Routines Endpoints`, function () {
+describe.only(`Routines Endpoints`, function () {
     let db;
 
     const { testUsers, testRoutines, testExercises } = helpers.makeExercisesFixtures();

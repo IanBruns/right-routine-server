@@ -7,12 +7,9 @@ const routinesRouter = express.Router();
 const jsonBodyParser = express.json();
 
 routinesRouter.route('/')
-    .get(requireAuth, (req, res, next) => {
-        RoutinesService.getUserRoutines(req.app.get('db'), req.user.id)
-            .then(routines => {
-                return res.json(routines.map(RoutinesService.serializeRoutine));
-            })
-            .catch(next);
+    .get(requireAuth, async (req, res, next) => {
+        routines = await RoutinesService.getUserRoutines(req.app.get('db'), req.user.id);
+        return res.json(routines.map(RoutinesService.serializeRoutine));
     })
     .post(requireAuth, jsonBodyParser, async (req, res, next) => {
         const { routine_name } = req.body;
